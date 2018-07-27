@@ -3,13 +3,13 @@
 # ARRAY FROM PATH VARIABLE FOR FURTHER WORK
 
 # Array creation from PATH variable
-eval $(echo CESTA=\(\"$PATH\"\) | sed "s/:/\"\ \"/g")
+eval $(echo PATHARRAY=\(\"$PATH\"\) | sed "s/:/\"\ \"/g")
 
 print_array()
 {
-	for (( i=0; i<${#CESTA[@]}; i++ ))
+	for (( i=0; i<${#PATHARRAY[@]}; i++ ))
 	do
-		echo ${CESTA[i]}
+		echo ${PATHARRAY[i]}
 	done
 }
 
@@ -22,26 +22,26 @@ array_cp()
 	eval $(echo "$2"=\(\"\$\{"$2"\[\@\]\}\"\ \"\$\{"$1"\[\@\]\}\"\))
 }
 
-# Adding parameter to the end of CESTA array (if it is there now, it is taken out and added to the end)
+# Adding parameter to the end of PATHARRAY array (if it is there now, it is taken out and added to the end)
 append() 
 {
 	exists=0;
-	for i in "${!CESTA[@]}"
+	for i in "${!PATHARRAY[@]}"
 	do
-		if [ "${CESTA[i]}" == "$1" ]; then
+		if [ "${PATHARRAY[i]}" == "$1" ]; then
 			exists=$i
 			
 		fi
 	done
 	
 	if [ $exists -ne 0 ]; then
-		for (( i=$exists; i<${#CESTA[@]}; i++ ))
+		for (( i=$exists; i<${#PATHARRAY[@]}; i++ ))
 		do
-			CESTA[i]=${CESTA[i+1]}
+			PATHARRAY[i]=${PATHARRAY[i+1]}
 		done
-		CESTA[${#CESTA[@]}-1]="$1";
+		PATHARRAY[${#PATHARRAY[@]}-1]="$1";
 	else
-		CESTA[${#CESTA[@]}]="$1";
+		PATHARRAY[${#PATHARRAY[@]}]="$1";
 	fi
 }
 
@@ -49,19 +49,18 @@ append()
 prepend() 
 {
 	append "$1"
-	for (( i=${#CESTA[@]}; i>0; i-- ))
+	for (( i=${#PATHARRAY[@]}; i>0; i-- ))
 	do
-			CESTA[i]=${CESTA[i-1]}
+			PATHARRAY[i]=${PATHARRAY[i-1]}
 	done
-	CESTA[0]="$1"
-	unset 'CESTA[${#CESTA[@]}-1]'
+	PATHARRAY[0]="$1"
+	unset 'PATHARRAY[${#PATHARRAY[@]}-1]'
 }
 
 # Tests
 echo '=== print_array ==='
 print_array
-echo '=== array_cp NEW CESTA; print_array ==='
-array_cp NEW CESTA
+array_cp NEW PATHARRAY
 print_array
 echo '=== append "a b"; print_array ==='
 append "a b"
