@@ -1,11 +1,10 @@
 #! /bin/bash
 
-# SKRIPT VYTVORI Z PROMENNE PATH POLE, SE KTERYM DALE PRACUJE
+# ARRAY FROM PATH VARIABLE FOR FURTHER WORK
 
-# Vytvoreni pole z promenne PATH 
+# Array creation from PATH variable
 eval $(echo CESTA=\(\"$PATH\"\) | sed "s/:/\"\ \"/g")
 
-# Funkce pro vypis pole
 print_array()
 {
 	for (( i=0; i<${#CESTA[@]}; i++ ))
@@ -14,16 +13,16 @@ print_array()
 	done
 }
 
-# Nove pole NEW
+# New array NEW
 NEW=("a b" "c d" "e" "f")
 
-# Kopirovani pole v prvnim parametru do pole v druhem paramestru
+# Copying array from the first parameter to the second one
 array_cp()
 {
 	eval $(echo "$2"=\(\"\$\{"$2"\[\@\]\}\"\ \"\$\{"$1"\[\@\]\}\"\))
 }
 
-# Pridani parametru na konec pole CESTA (pokud jiz v poli parametr je, z pole se vyjme a prida na konec)
+# Adding parameter to the end of CESTA array (if it is there now, it is taken out and added to the end)
 append() 
 {
 	exists=0;
@@ -46,6 +45,7 @@ append()
 	fi
 }
 
+# The same as append, but for start of the array
 prepend() 
 {
 	append "$1"
@@ -57,7 +57,7 @@ prepend()
 	unset 'CESTA[${#CESTA[@]}-1]'
 }
 
-# Test funkci
+# Tests
 echo '=== print_array ==='
 print_array
 echo '=== array_cp NEW CESTA; print_array ==='
